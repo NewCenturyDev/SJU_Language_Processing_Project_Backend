@@ -74,6 +74,8 @@ public class MusicCrudServ extends MusicLogicServ implements MusicCrudInterface 
                 () -> new Exception(msgSrc.getMessage("error.music.notExist", null, Locale.ENGLISH))
         );
 
+        storageServ.deleteEntityStorage("music", target.getId());
+
         musicRepo.delete(target);
         return target.getId();
     }
