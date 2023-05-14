@@ -19,7 +19,7 @@ public class UserProfileLogicServ implements UserProfileServCommon {
 
     protected List<Permission> grantUserPerm() {
         List<Permission> perms = new ArrayList<>();
-        perms.add(Permission.STUDENT);
+        perms.add(Permission.USER);
         return perms;
     }
 

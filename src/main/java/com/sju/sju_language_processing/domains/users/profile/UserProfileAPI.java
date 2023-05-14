@@ -28,7 +28,7 @@ public class UserProfileAPI {
         return new APIUtil<CreateUserProfileResDTO>() {
             @Override
             protected void onSuccess() throws Exception {
-                resDTO.setCreatedUserProfile(userProfileCrudServ.createAdmin(reqDTO));
+                resDTO.setCreatedUserProfile(userProfileCrudServ.createUser(reqDTO));
             }
         }.execute(resDTO, "res.users.create.success");
     }

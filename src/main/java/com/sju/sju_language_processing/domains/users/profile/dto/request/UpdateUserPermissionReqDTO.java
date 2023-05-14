@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class UpdateUserPermissionReqDTO {
-    @NotBlank(message = "valid.users.id.blank")
+    @NotNull(message = "valid.users.id.null")
     @PositiveOrZero(message = "valid.users.id.positive")
     private Long id;
     @NotNull(message = "valid.users.permission.null")

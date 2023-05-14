@@ -34,7 +34,9 @@ public class MessageConfig implements WebMvcConfigurer {
         ReloadableResourceBundleMessageSource msgSrc = new ReloadableResourceBundleMessageSource();
         msgSrc.setBasenames(
                 "messages/global/validation",
-                "messages/users/validation"
+                "messages/users/validation",
+                "messages/sentences/validation",
+                "messages/musics/validation"
         );
         return msgSrc;
     }
@@ -43,7 +45,9 @@ public class MessageConfig implements WebMvcConfigurer {
     public static MessageSource getResponseMsgSrc() {
         ReloadableResourceBundleMessageSource msgSrc = new ReloadableResourceBundleMessageSource();
         msgSrc.setBasenames(
-                "messages/users/response"
+                "messages/users/response",
+                "messages/sentences/response",
+                "messages/musics/response"
         );
         return msgSrc;
     }
@@ -68,6 +72,30 @@ public class MessageConfig implements WebMvcConfigurer {
                 "messages/users/validation",
                 "messages/users/response",
                 "messages/users/error"
+        );
+        return msgSrc;
+    }
+
+    @Bean
+    public static MessageSource getSentenceMsgSrc() {
+        ReloadableResourceBundleMessageSource msgSrc = new ReloadableResourceBundleMessageSource();
+        msgSrc.setBasenames(
+                "messages/global/validation",
+                "messages/sentences/validation",
+                "messages/sentences/response",
+                "messages/sentences/error"
+        );
+        return msgSrc;
+    }
+
+    @Bean
+    public static MessageSource getMusicMsgSrc() {
+        ReloadableResourceBundleMessageSource msgSrc = new ReloadableResourceBundleMessageSource();
+        msgSrc.setBasenames(
+                "messages/global/validation",
+                "messages/musics/validation",
+                "messages/musics/response",
+                "messages/musics/error"
         );
         return msgSrc;
     }

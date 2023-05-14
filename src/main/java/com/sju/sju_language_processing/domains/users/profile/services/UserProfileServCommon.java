@@ -22,6 +22,6 @@ public interface UserProfileServCommon {
     }
     default boolean checkCurrentUserIsUser(Authentication auth) {
         UserProfile profile = this.fetchCurrentUser(auth);
-        return profile.getPermissions().contains(Permission.STUDENT);
+        return profile.getPermissions().contains(Permission.USER);
     }
 }

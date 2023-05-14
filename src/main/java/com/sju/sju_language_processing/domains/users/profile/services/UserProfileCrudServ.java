@@ -23,7 +23,7 @@ public class UserProfileCrudServ extends UserProfileLogicServ implements UserPro
     }
 
     @Transactional
-    public UserProfile createAdmin(CreateUserProfileReqDTO reqDTO) throws Exception {
+    public UserProfile createUser(CreateUserProfileReqDTO reqDTO) throws Exception {
         this.checkEmailDuplication(reqDTO.getEmail());
         this.checkPhoneDuplication(reqDTO.getPhone());
 
@@ -34,7 +34,7 @@ public class UserProfileCrudServ extends UserProfileLogicServ implements UserPro
                 .phone(reqDTO.getPhone())
                 .name(reqDTO.getName())
 
-                .permissions(this.grantAdminPerm())
+                .permissions(this.grantUserPerm())
                 .active(true)
                 .build();
 

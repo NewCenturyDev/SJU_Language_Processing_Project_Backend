@@ -9,47 +9,52 @@ import com.sju.sju_language_processing.domains.musics.dto.res.UpdateMusicCategor
 import com.sju.sju_language_processing.domains.musics.dto.res.UploadMusicResDTO;
 import com.sju.sju_language_processing.domains.musics.service.MusicCrudServ;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@AllArgsConstructor
 public class MusicAPI {
-    MusicCrudServ musicCrudServ;
+    private final MusicCrudServ musicCrudServ;
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','ROOT_ADMIN')")
     @PostMapping("/musics")
-    ResponseEntity<?> uploadMusic(Authentication auth, @Valid UploadMusicReqDTO reqDTO) {
+    ResponseEntity<?> uploadMusic(@Valid UploadMusicReqDTO reqDTO) {
         UploadMusicResDTO resDTO = new UploadMusicResDTO();
 
         return new APIUtil<UploadMusicResDTO>() {
             @Override
             protected void onSuccess() throws Exception {
-
+                resDTO.setUploadedMusic(musicCrudServ.createMusic(reqDTO));
             }
-        }.execute(resDTO, "success.music.upload");
+        }.execute(resDTO, "res.music.upload.success");
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','ROOT_ADMIN')")
     @PutMapping("/musics")
-    ResponseEntity<?> updateMusicCategory(Authentication auth, @Valid @RequestBody UpdateMusicCategoryReqDTO reqDTO) {
+    ResponseEntity<?> updateMusicCategory(@Valid @RequestBody UpdateMusicCategoryReqDTO reqDTO) {
         UpdateMusicCategoryResDTO resDTO = new UpdateMusicCategoryResDTO();
 
         return new APIUtil<UpdateMusicCategoryResDTO>() {
             @Override
             protected void onSuccess() throws Exception {
-
+                resDTO.setUpdatedMusic(musicCrudServ.updateMusicCategory(reqDTO));
             }
-        }.execute(resDTO, "success.music.update");
+        }.execute(resDTO, "res.music.update.success");
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','ROOT_ADMIN')")
     @DeleteMapping("/musics")
-    ResponseEntity<?> deleteMusic(Authentication auth, @Valid DeleteMusicReqDTO reqDTO) {
+    ResponseEntity<?> deleteMusic(@Valid DeleteMusicReqDTO reqDTO) {
         DeleteMusicResDTO resDTO = new DeleteMusicResDTO();
 
         return new APIUtil<DeleteMusicResDTO>() {
             @Override
             protected void onSuccess() throws Exception {
-
+                resDTO.setDeletedMusicId(musicCrudServ.deleteMusic(reqDTO.getId()));
             }
-        }.execute(resDTO, "success.music.delete");
+        }.execute(resDTO, "res.music.delete.success");
     }
 }

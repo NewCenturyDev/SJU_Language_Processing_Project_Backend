@@ -21,16 +21,16 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public class FileMetadata {
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
     protected FileType type;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     protected String fileName;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     protected String fileURL;
 
-    @Column(nullable = false)
+    @Column
     protected Long fileSize;
 
     @Column(nullable = false)
