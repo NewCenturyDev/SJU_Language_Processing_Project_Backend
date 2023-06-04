@@ -2,9 +2,11 @@ package com.sju.sju_language_processing.domains.musics;
 
 import com.sju.sju_language_processing.commons.http.APIUtil;
 import com.sju.sju_language_processing.domains.musics.dto.req.DeleteMusicReqDTO;
+import com.sju.sju_language_processing.domains.musics.dto.req.FetchMusicReqDTO;
 import com.sju.sju_language_processing.domains.musics.dto.req.UpdateMusicCategoryReqDTO;
 import com.sju.sju_language_processing.domains.musics.dto.req.UploadMusicReqDTO;
 import com.sju.sju_language_processing.domains.musics.dto.res.DeleteMusicResDTO;
+import com.sju.sju_language_processing.domains.musics.dto.res.FetchMusicResDTO;
 import com.sju.sju_language_processing.domains.musics.dto.res.UpdateMusicCategoryResDTO;
 import com.sju.sju_language_processing.domains.musics.dto.res.UploadMusicResDTO;
 import com.sju.sju_language_processing.domains.musics.service.MusicCrudServ;
@@ -30,6 +32,19 @@ public class MusicAPI {
                 resDTO.setUploadedMusic(musicCrudServ.createMusic(reqDTO));
             }
         }.execute(resDTO, "res.music.upload.success");
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ROOT_ADMIN')")
+    @GetMapping("/musics")
+    ResponseEntity<?> fetchMusic(@Valid FetchMusicReqDTO reqDTO) {
+        FetchMusicResDTO resDTO = new FetchMusicResDTO();
+
+        return new APIUtil<FetchMusicResDTO>() {
+            @Override
+            protected void onSuccess() throws Exception {
+                resDTO.setMusics(musicCrudServ.fetchAllMusicsByEmotion(reqDTO.getCategory()));
+            }
+        }.execute(resDTO, "res.music.fetch.success");
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','ROOT_ADMIN')")

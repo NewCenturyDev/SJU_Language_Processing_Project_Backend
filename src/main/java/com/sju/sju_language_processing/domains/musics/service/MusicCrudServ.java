@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Locale;
 
 @Service
@@ -56,6 +57,10 @@ public class MusicCrudServ extends MusicLogicServ implements MusicCrudInterface 
         return musicRepo.findRandomMusicByCategory(emotion.toString()).orElseThrow(
                 () -> new Exception(msgSrc.getMessage("error.music.notExist", null, Locale.ENGLISH))
         );
+    }
+
+    public List<Music> fetchAllMusicsByEmotion(EmotionCategory emotion) throws Exception {
+        return musicRepo.findAllByCategory(emotion);
     }
 
     @Transactional
