@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.Objects;
 
 @Service
@@ -23,6 +24,10 @@ public class SentenceLogicServ {
     protected static MessageSource msgSrc = MessageConfig.getSentenceMsgSrc();
 
     protected SentenceInput predictInputEmotion(SentenceInput input) throws Exception {
+        if (input.getText().matches("[a-zA-Z.,?!]+")) {
+            throw new Exception(msgSrc.getMessage("error.sentence.notEnglish", null, Locale.ENGLISH));
+        }
+
         URL resource = getClass().getClassLoader().getResource("python/english_prediction.py");
         String pythonScriptPath = Paths.get(Objects.requireNonNull(resource).toURI()).toString();
         ProcessBuilder pb = new ProcessBuilder("python", pythonScriptPath, input.getText());
