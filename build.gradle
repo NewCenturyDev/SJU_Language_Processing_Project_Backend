@@ -27,6 +27,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework:spring-context-support:6.0.6'
 
+    implementation 'black.ninia:jep:4.1.1'
     implementation 'org.json:json:20230227'
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'org.apache.logging.log4j:log4j-api:2.20.0'

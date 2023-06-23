@@ -9,6 +9,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.Objects;
+
 @Service
 @AllArgsConstructor
 public class SentenceLogicServ {
@@ -17,8 +23,15 @@ public class SentenceLogicServ {
     protected static MessageSource msgSrc = MessageConfig.getSentenceMsgSrc();
 
     protected SentenceInput predictInputEmotion(SentenceInput input) throws Exception {
-        // TODO: text 를 조회해서 AI 모델로 보낸 후, 맞는 감정 가져오기
-        EmotionCategory predictionResult = EmotionCategory.NEUTRAL;
+        URL resource = getClass().getClassLoader().getResource("python/english_prediction.py");
+        String pythonScriptPath = Paths.get(Objects.requireNonNull(resource).toURI()).toString();
+        ProcessBuilder pb = new ProcessBuilder("python", pythonScriptPath, input.getText());
+        Process p = pb.start();
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+        String resultText = in.readLine();
+        EmotionCategory predictionResult = EmotionCategory.valueOf(resultText);
         input.setCategory(predictionResult);
         input.setMusic(musicCrudInterface.fetchRandomMusicByEmotion(predictionResult));
         return input;
