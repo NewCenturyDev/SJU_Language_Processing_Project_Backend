@@ -60,8 +60,8 @@ public class SentenceCrudServ extends SentenceLogicServ implements UserProfileSe
         return inputRepo.findAllByMusicId(musicId, PageRequest.of(pageIdx, pageLimit));
     }
 
-    public List<SentenceInput> fetchSentenceByTimeRange(LocalDateTime from, LocalDateTime to) {
-        return inputRepo.findAllByTimestampAfterAndTimestampBefore(from, to == null ? LocalDateTime.now() : to);
+    public Page<SentenceInput> fetchSentenceByTimeRange(LocalDateTime from, LocalDateTime to, int pageIdx, int pageLimit) {
+        return inputRepo.findAllByTimestampAfterAndTimestampBefore(from, to == null ? LocalDateTime.now() : to, PageRequest.of(pageIdx, pageLimit));
     }
 
     @Transactional

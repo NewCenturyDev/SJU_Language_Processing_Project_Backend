@@ -24,7 +24,7 @@ public class SentenceLogicServ {
     protected static MessageSource msgSrc = MessageConfig.getSentenceMsgSrc();
 
     protected SentenceInput predictInputEmotion(SentenceInput input) throws Exception {
-        if (input.getText().matches("[a-zA-Z.,?!]+")) {
+        if (!input.getText().matches("[ a-zA-Z.,?!'\"]+")) {
             throw new Exception(msgSrc.getMessage("error.sentence.notEnglish", null, Locale.ENGLISH));
         }
 

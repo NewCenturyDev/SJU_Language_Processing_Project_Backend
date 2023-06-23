@@ -58,7 +58,11 @@ public class SentenceAPI {
                         resDTO.setSentenceInputs(sentenceInputPage.getContent());
                         buildPageableResDTO(resDTO, sentenceInputPage);
                     }
-                    case TIME_RANGE -> resDTO.setSentenceInputs(sentenceCrudServ.fetchSentenceByTimeRange(reqDTO.getTimeRangeFrom(), reqDTO.getTimeRangeTo()));
+                    case TIME_RANGE -> {
+                        Page<SentenceInput> sentenceInputPage = sentenceCrudServ.fetchSentenceByTimeRange(reqDTO.getTimeRangeFrom(), reqDTO.getTimeRangeTo(), reqDTO.getPageIdx(), reqDTO.getPageLimit());
+                        resDTO.setSentenceInputs(sentenceInputPage.getContent());
+                        buildPageableResDTO(resDTO, sentenceInputPage);
+                    }
                 }
             }
         }.execute(resDTO, "res.sentence.fetch.success");
