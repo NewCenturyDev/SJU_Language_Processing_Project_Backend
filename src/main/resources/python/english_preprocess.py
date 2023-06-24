@@ -8,7 +8,7 @@ import pandas as pd
 from keras.preprocessing.text import Tokenizer
 from keras_preprocessing.sequence import pad_sequences
 
-PREPED_DATA_PATH = "./preprocessed/"
+PREPED_DATA_PATH = dir + './preprocessed/'
 MAX_SEQ_LEN = 52
 
 # DB 접속정보

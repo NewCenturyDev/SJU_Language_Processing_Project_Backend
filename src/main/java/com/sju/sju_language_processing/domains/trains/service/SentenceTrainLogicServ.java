@@ -69,7 +69,10 @@ public class SentenceTrainLogicServ {
         String pythonScriptPath = Paths.get(Objects.requireNonNull(resource).toURI()).toString();
         ProcessBuilder pb = new ProcessBuilder("python", pythonScriptPath);
         Process p = pb.start();
-        p.waitFor();
+        int exitCode = p.waitFor();
+        if (exitCode != 0) {
+            throw new Exception(msgSrc.getMessage("error.sentence.preprocess", new Integer[]{exitCode}, Locale.ENGLISH));
+        }
     }
 
     protected void cleanWorkingDir() throws Exception{
