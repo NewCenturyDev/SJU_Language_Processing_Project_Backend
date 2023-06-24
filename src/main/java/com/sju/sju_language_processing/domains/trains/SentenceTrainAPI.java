@@ -11,6 +11,7 @@ import com.sju.sju_language_processing.domains.trains.dto.res.FetchSentenceTrain
 import com.sju.sju_language_processing.domains.trains.dto.res.UpdateSentenceTrainResDTO;
 import com.sju.sju_language_processing.domains.trains.entity.SentenceTrain;
 import com.sju.sju_language_processing.domains.trains.service.SentenceTrainCrudServ;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @AllArgsConstructor
@@ -70,15 +73,21 @@ public class SentenceTrainAPI {
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType("application/zip");
         response.addHeader("Content-Disposition", "attachment; filename=\"NLP_Train_Data.zip\"");
+        ServletOutputStream stream = null;
         try {
-            this.sentenceTrainCrudServ.downloadTrainData(response.getOutputStream());
+            stream = response.getOutputStream();
+            this.sentenceTrainCrudServ.downloadTrainData(stream);
+            stream.close();
         } catch (Exception e) {
             try {
                 GeneralResDTO resDTO = new GeneralResDTO(new DTOMetadata(e.getLocalizedMessage(), e.getClass().toString()));
                 response.setStatus(422);
                 response.setContentType("application/json");
                 String responseJSONString = objectMapper.writeValueAsString(resDTO);
-                response.getWriter().write(responseJSONString);
+                if (stream != null) {
+                    stream.write(responseJSONString.getBytes(StandardCharsets.UTF_8));
+                    stream.close();
+                }
             } catch (Exception ignored) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }

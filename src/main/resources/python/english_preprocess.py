@@ -8,12 +8,15 @@ import pandas as pd
 from keras.preprocessing.text import Tokenizer
 from keras_preprocessing.sequence import pad_sequences
 
-PREPED_DATA_PATH = dir + './preprocessed/'
+# PREPED_DATA_PATH_WINDOWS = ''
+PREPED_DATA_PATH_LINUX = '/app/data/preprocessed'
+dir = os.path.dirname(__file__)
+PREPED_DATA_PATH = dir + '/preprocessed/'
 MAX_SEQ_LEN = 52
 
 # DB 접속정보
 MYSQL_SERVER = 'localhost' if platform.system() == 'Windows' else 'sju_nlp_database'
-MYSQL_USER = 'sju_nlp'
+MYSQL_USER = 'sju_nlp_py'
 MYSQL_PASSWORD = 'password'
 MYSQL_SCHEMA = 'sju_nlp'
 
