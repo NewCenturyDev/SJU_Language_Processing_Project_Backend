@@ -7,6 +7,6 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UpdateMusicCategoryResDTO extends GeneralResDTO {
+public class UpdateMusicResDTO extends GeneralResDTO {
     private Music updatedMusic;
 }

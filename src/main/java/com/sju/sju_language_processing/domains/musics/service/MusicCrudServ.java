@@ -3,7 +3,7 @@ package com.sju.sju_language_processing.domains.musics.service;
 import com.sju.sju_language_processing.commons.base.media.FileMetadata;
 import com.sju.sju_language_processing.commons.storage.FileType;
 import com.sju.sju_language_processing.commons.storage.StorageService;
-import com.sju.sju_language_processing.domains.musics.dto.req.UpdateMusicCategoryReqDTO;
+import com.sju.sju_language_processing.domains.musics.dto.req.UpdateMusicReqDTO;
 import com.sju.sju_language_processing.domains.musics.dto.req.UploadMusicReqDTO;
 import com.sju.sju_language_processing.domains.musics.entity.Music;
 import com.sju.sju_language_processing.domains.musics.repository.MusicRepo;
@@ -59,17 +59,20 @@ public class MusicCrudServ extends MusicLogicServ implements MusicCrudInterface 
         );
     }
 
-    public List<Music> fetchAllMusicsByEmotion(EmotionCategory emotion) throws Exception {
+    public List<Music> fetchAllMusicsByEmotion(EmotionCategory emotion) {
         return musicRepo.findAllByCategory(emotion);
     }
 
     @Transactional
-    public Music updateMusicCategory(UpdateMusicCategoryReqDTO reqDTO) throws Exception {
+    public Music updateMusic(UpdateMusicReqDTO reqDTO) throws Exception {
         Music target = musicRepo.findById(reqDTO.getId()).orElseThrow(
                 () -> new Exception(msgSrc.getMessage("error.music.notExist", null, Locale.ENGLISH))
         );
 
+        target.setTitle(reqDTO.getTitle());
         target.setCategory(reqDTO.getCategory());
+        target.setAuthor(reqDTO.getAuthor());
+        target.setArtist(reqDTO.getArtist());
         return target;
     }
 

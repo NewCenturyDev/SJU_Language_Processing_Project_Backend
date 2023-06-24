@@ -3,11 +3,11 @@ package com.sju.sju_language_processing.domains.musics;
 import com.sju.sju_language_processing.commons.http.APIUtil;
 import com.sju.sju_language_processing.domains.musics.dto.req.DeleteMusicReqDTO;
 import com.sju.sju_language_processing.domains.musics.dto.req.FetchMusicReqDTO;
-import com.sju.sju_language_processing.domains.musics.dto.req.UpdateMusicCategoryReqDTO;
+import com.sju.sju_language_processing.domains.musics.dto.req.UpdateMusicReqDTO;
 import com.sju.sju_language_processing.domains.musics.dto.req.UploadMusicReqDTO;
 import com.sju.sju_language_processing.domains.musics.dto.res.DeleteMusicResDTO;
 import com.sju.sju_language_processing.domains.musics.dto.res.FetchMusicResDTO;
-import com.sju.sju_language_processing.domains.musics.dto.res.UpdateMusicCategoryResDTO;
+import com.sju.sju_language_processing.domains.musics.dto.res.UpdateMusicResDTO;
 import com.sju.sju_language_processing.domains.musics.dto.res.UploadMusicResDTO;
 import com.sju.sju_language_processing.domains.musics.service.MusicCrudServ;
 import jakarta.validation.Valid;
@@ -49,13 +49,13 @@ public class MusicAPI {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','ROOT_ADMIN')")
     @PutMapping("/musics")
-    ResponseEntity<?> updateMusicCategory(@Valid @RequestBody UpdateMusicCategoryReqDTO reqDTO) {
-        UpdateMusicCategoryResDTO resDTO = new UpdateMusicCategoryResDTO();
+    ResponseEntity<?> updateMusicCategory(@Valid @RequestBody UpdateMusicReqDTO reqDTO) {
+        UpdateMusicResDTO resDTO = new UpdateMusicResDTO();
 
-        return new APIUtil<UpdateMusicCategoryResDTO>() {
+        return new APIUtil<UpdateMusicResDTO>() {
             @Override
             protected void onSuccess() throws Exception {
-                resDTO.setUpdatedMusic(musicCrudServ.updateMusicCategory(reqDTO));
+                resDTO.setUpdatedMusic(musicCrudServ.updateMusic(reqDTO));
             }
         }.execute(resDTO, "res.music.update.success");
     }
