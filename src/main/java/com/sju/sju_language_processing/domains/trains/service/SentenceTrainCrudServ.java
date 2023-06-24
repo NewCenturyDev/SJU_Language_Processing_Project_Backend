@@ -1,5 +1,6 @@
 package com.sju.sju_language_processing.domains.trains.service;
 
+import com.sju.sju_language_processing.commons.storage.StorageService;
 import com.sju.sju_language_processing.domains.musics.service.MusicCrudInterface;
 import com.sju.sju_language_processing.domains.sentences.entity.EmotionCategory;
 import com.sju.sju_language_processing.domains.trains.dto.req.CreateSentenceTrainReqDTO;
@@ -7,6 +8,7 @@ import com.sju.sju_language_processing.domains.trains.dto.req.UpdateSentenceTrai
 import com.sju.sju_language_processing.domains.trains.entity.SentenceTrain;
 import com.sju.sju_language_processing.domains.trains.repository.SentenceTrainRepo;
 import com.sju.sju_language_processing.domains.users.profile.services.UserProfileServCommon;
+import jakarta.servlet.ServletOutputStream;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,8 @@ import java.util.Locale;
 
 @Service
 public class SentenceTrainCrudServ extends SentenceTrainLogicServ implements UserProfileServCommon {
-    public SentenceTrainCrudServ(SentenceTrainRepo inputRepo, MusicCrudInterface musicCrudInterface) {
-        super(inputRepo, musicCrudInterface);
+    public SentenceTrainCrudServ(SentenceTrainRepo inputRepo, MusicCrudInterface musicCrudInterface, StorageService storageServ) {
+        super(inputRepo, musicCrudInterface, storageServ);
     }
 
     @Transactional
@@ -63,5 +65,11 @@ public class SentenceTrainCrudServ extends SentenceTrainLogicServ implements Use
         SentenceTrain target = this.fetchSentenceById(id);
         inputRepo.delete(target);
         return target.getId();
+    }
+
+    public void downloadTrainData(ServletOutputStream outputStream) throws Exception {
+        this.cleanWorkingDir();
+        this.preProcessTrainData();
+        this.zipDataFiles(outputStream);
     }
 }

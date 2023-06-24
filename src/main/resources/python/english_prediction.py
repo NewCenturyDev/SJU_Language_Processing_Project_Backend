@@ -18,11 +18,11 @@ from nltk.corpus import stopwords
 # 환경변수
 dir = os.path.dirname(__file__)
 NLTK_PATH_WINDOWS = dir + '\\nltk_data'
-NLTK_PATH_LINUX = '/app/data'
+NLTK_PATH_LINUX = '/app/nltk_data'
 nltk.data.path.append(NLTK_PATH_WINDOWS if platform.system() == 'Windows' else NLTK_PATH_LINUX)
 
 PATH = dir + '/result/nlp_classifier_en/'
-TOKENIZER_PATH = dir + '/preprocessed/tokenizer.json'
+TOKENIZER_PATH = dir + '/result/nlp_classifier_en/tokenizer.json'
 SAVE_FILE_NM = 'weights.h5'  # 저장된 best model 이름
 MAX_SEQ_LEN = 52
 

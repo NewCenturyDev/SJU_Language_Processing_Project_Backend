@@ -1,6 +1,9 @@
 package com.sju.sju_language_processing.domains.trains;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sju.sju_language_processing.commons.http.APIUtil;
+import com.sju.sju_language_processing.commons.http.DTOMetadata;
+import com.sju.sju_language_processing.commons.http.GeneralResDTO;
 import com.sju.sju_language_processing.domains.trains.dto.req.*;
 import com.sju.sju_language_processing.domains.trains.dto.res.CreateSentenceTrainResDTO;
 import com.sju.sju_language_processing.domains.trains.dto.res.DeleteSentenceTrainResDTO;
@@ -8,6 +11,7 @@ import com.sju.sju_language_processing.domains.trains.dto.res.FetchSentenceTrain
 import com.sju.sju_language_processing.domains.trains.dto.res.UpdateSentenceTrainResDTO;
 import com.sju.sju_language_processing.domains.trains.entity.SentenceTrain;
 import com.sju.sju_language_processing.domains.trains.service.SentenceTrainCrudServ;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,10 +23,11 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class SentenceTrainAPI {
     private final SentenceTrainCrudServ sentenceTrainCrudServ;
+    private final ObjectMapper objectMapper;
 
     @PreAuthorize("hasAnyAuthority('ADMIN','ROOT_ADMIN')")
     @PostMapping("/trains")
-    ResponseEntity<?> createSentenceInput(@Valid @RequestBody CreateSentenceTrainReqDTO reqDTO) {
+    ResponseEntity<?> createSentenceTrain(@Valid @RequestBody CreateSentenceTrainReqDTO reqDTO) {
         CreateSentenceTrainResDTO resDTO = new CreateSentenceTrainResDTO();
 
         return new APIUtil<CreateSentenceTrainResDTO>() {
@@ -35,7 +40,7 @@ public class SentenceTrainAPI {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','ROOT_ADMIN')")
     @GetMapping("/trains")
-    ResponseEntity<?> fetchSentenceInput(@Valid FetchSentenceTrainReqDTO reqDTO, @RequestHeader("Request-Type") String reqHeader) {
+    ResponseEntity<?> fetchSentenceTrain(@Valid FetchSentenceTrainReqDTO reqDTO, @RequestHeader("Request-Type") String reqHeader) {
         FetchSentenceTrainReqType reqType = FetchSentenceTrainReqType.valueOf(reqHeader);
         FetchSentenceTrainResDTO resDTO = new FetchSentenceTrainResDTO();
 
@@ -45,14 +50,14 @@ public class SentenceTrainAPI {
                 switch (reqType) {
                     case ID -> resDTO.setSentenceTrain(sentenceTrainCrudServ.fetchSentenceById(reqDTO.getId()));
                     case ALL_PAGE -> {
-                        Page<SentenceTrain> sentenceInputPage = sentenceTrainCrudServ.fetchAllSentences(reqDTO.getPageIdx(), reqDTO.getPageLimit());
-                        resDTO.setSentenceTrains(sentenceInputPage.getContent());
-                        buildPageableResDTO(resDTO, sentenceInputPage);
+                        Page<SentenceTrain> sentenceTrainPage = sentenceTrainCrudServ.fetchAllSentences(reqDTO.getPageIdx(), reqDTO.getPageLimit());
+                        resDTO.setSentenceTrains(sentenceTrainPage.getContent());
+                        buildPageableResDTO(resDTO, sentenceTrainPage);
                     }
                     case CATEGORY -> {
-                        Page<SentenceTrain> sentenceInputPage = sentenceTrainCrudServ.fetchSentencesByCategory(reqDTO.getCategory(), reqDTO.getPageIdx(), reqDTO.getPageLimit());
-                        resDTO.setSentenceTrains(sentenceInputPage.getContent());
-                        buildPageableResDTO(resDTO, sentenceInputPage);
+                        Page<SentenceTrain> sentenceTrainPage = sentenceTrainCrudServ.fetchSentencesByCategory(reqDTO.getCategory(), reqDTO.getPageIdx(), reqDTO.getPageLimit());
+                        resDTO.setSentenceTrains(sentenceTrainPage.getContent());
+                        buildPageableResDTO(resDTO, sentenceTrainPage);
                     }
                 }
             }
@@ -60,8 +65,29 @@ public class SentenceTrainAPI {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','ROOT_ADMIN')")
+    @GetMapping("/trains/data")
+    void downloadSentenceTrain(HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/zip");
+        response.addHeader("Content-Disposition", "attachment; filename=\"NLP_Train_Data.zip\"");
+        try {
+            this.sentenceTrainCrudServ.downloadTrainData(response.getOutputStream());
+        } catch (Exception e) {
+            try {
+                GeneralResDTO resDTO = new GeneralResDTO(new DTOMetadata(e.getLocalizedMessage(), e.getClass().toString()));
+                response.setStatus(422);
+                response.setContentType("application/json");
+                String responseJSONString = objectMapper.writeValueAsString(resDTO);
+                response.getWriter().write(responseJSONString);
+            } catch (Exception ignored) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','ROOT_ADMIN')")
     @PutMapping("/trains")
-    ResponseEntity<?> updateSentenceInput(@Valid @RequestBody UpdateSentenceTrainReqDTO reqDTO) {
+    ResponseEntity<?> updateSentenceTrain(@Valid @RequestBody UpdateSentenceTrainReqDTO reqDTO) {
         UpdateSentenceTrainResDTO resDTO = new UpdateSentenceTrainResDTO();
 
         return new APIUtil<UpdateSentenceTrainResDTO>() {
@@ -74,7 +100,7 @@ public class SentenceTrainAPI {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','ROOT_ADMIN')")
     @DeleteMapping("/trains")
-    ResponseEntity<?> deleteSentenceInput(@Valid DeleteSentenceTrainReqDTO reqDTO) {
+    ResponseEntity<?> deleteSentenceTrain(@Valid DeleteSentenceTrainReqDTO reqDTO) {
         DeleteSentenceTrainResDTO resDTO = new DeleteSentenceTrainResDTO();
 
         return new APIUtil<DeleteSentenceTrainResDTO>() {

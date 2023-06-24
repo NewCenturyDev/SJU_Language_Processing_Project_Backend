@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -184,14 +183,6 @@ public class StorageService {
         this.createDirectoryIfNotExist(entityStorageRootPath);
     }
 
-    // 공통 - 하위 엔티티 루트 디렉토리 생성
-    private void createEntityRootStorageIfNotExist(Path parentEntityStoragePath, String subEntityName) throws Exception {
-        Path subEntityStorageRootPath = Paths.get(parentEntityStoragePath.toString(), subEntityName);
-        // Create Parent Dir If not Exists
-        Files.createDirectories(subEntityStorageRootPath);
-        this.createDirectoryIfNotExist(subEntityStorageRootPath);
-    }
-
     // 공통 - 엔티티 개별 디렉토리 생성
     public void createEntityStorage(String entityName, Long entityId) throws Exception {
         Path entityStoragePath = Paths.get(this.storageRootPath, entityName, entityName + "_" + entityId.toString());
@@ -202,19 +193,6 @@ public class StorageService {
             );
         } else {
             this.createDirectory(entityStoragePath);
-        }
-    }
-
-    // 공통 - 하위 엔티티 개별 디렉토리 생성
-    public void createEntityStorage(Path parentEntityStoragePath, String subEntity, Long subEntityId) throws Exception {
-        Path subEntityStoragePath = Paths.get(parentEntityStoragePath.toString(), subEntity, subEntity + "_" + subEntityId);
-        this.createEntityRootStorageIfNotExist(parentEntityStoragePath, subEntity);
-        if (subEntityStoragePath.toFile().isDirectory()) {
-            throw new Exception(
-                    this.msgSrc.getMessage("storage.dir.exists", null, Locale.ENGLISH)
-            );
-        } else {
-            this.createDirectory(subEntityStoragePath);
         }
     }
 
@@ -231,18 +209,5 @@ public class StorageService {
     // 공통 - 엔티티 스토리지 삭제
     public void deleteEntityStorage(String entityName, Long entityId) throws Exception {
         FileUtils.deleteDirectory(this.getEntityStoragePath(entityName, entityId).toFile());
-    }
-
-    // 공통 - 자식 엔티티 스토리지 삭제
-    public void deleteEntityStorage(Path parentEntityStoragePath, String subEntityName, Long subEntityId) throws Exception {
-        FileUtils.deleteDirectory(this.getEntityStoragePath(parentEntityStoragePath, subEntityName, subEntityId).toFile());
-    }
-
-    /* 코스 관련 */
-
-    // 코스 삭제시 첨부파일 디렉토리 삭제 메소드
-    public void deleteCourseFileStorage(Long courseId) throws IOException {
-        File courseDetailFileStorage = Paths.get(this.storageRootPath, "courses", "course_" + courseId.toString()).toFile();
-        FileUtils.deleteDirectory(courseDetailFileStorage);
     }
 }

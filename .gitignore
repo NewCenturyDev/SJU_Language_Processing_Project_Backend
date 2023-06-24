@@ -33,6 +33,7 @@ out/
 /nbdist/
 /.nb-gradle/
 /src/main/**/python/preprocessed
+/src/main/**/python/processed
 /src/main/**/python/result
 /src/main/**/python/nltk_data
 
