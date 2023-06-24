@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
 @Service
@@ -60,8 +60,12 @@ public class SentenceCrudServ extends SentenceLogicServ implements UserProfileSe
         return inputRepo.findAllByMusicId(musicId, PageRequest.of(pageIdx, pageLimit));
     }
 
-    public Page<SentenceInput> fetchSentenceByTimeRange(LocalDateTime from, LocalDateTime to, int pageIdx, int pageLimit) {
-        return inputRepo.findAllByTimestampAfterAndTimestampBefore(from, to == null ? LocalDateTime.now() : to, PageRequest.of(pageIdx, pageLimit));
+    public Page<SentenceInput> fetchSentenceByTimeRange(LocalDateTime from, LocalDateTime to, int pageIdx, int pageLimit) throws Exception{
+        long periodLength = ChronoUnit.DAYS.between(from == null ? LocalDateTime.MIN : from, to == null ? LocalDateTime.now() : to);
+        if (periodLength > 90) {
+            throw new Exception(msgSrc.getMessage("error.sentence.period", null, Locale.ENGLISH));
+        }
+        return inputRepo.findAllByTimestampAfterAndTimestampBefore(from == null ? LocalDateTime.MIN : from, to == null ? LocalDateTime.now() : to, PageRequest.of(pageIdx, pageLimit));
     }
 
     @Transactional

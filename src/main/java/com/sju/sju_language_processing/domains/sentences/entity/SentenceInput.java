@@ -1,6 +1,5 @@
 package com.sju.sju_language_processing.domains.sentences.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sju.sju_language_processing.domains.musics.entity.Music;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PastOrPresent;
