@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Locale;
 
 @Service
-public class SentenceTrainTrainCrudServ extends SentenceTrainLogicServ implements UserProfileServCommon {
-    public SentenceTrainTrainCrudServ(SentenceTrainRepo inputRepo, MusicCrudInterface musicCrudInterface) {
+public class SentenceTrainCrudServ extends SentenceTrainLogicServ implements UserProfileServCommon {
+    public SentenceTrainCrudServ(SentenceTrainRepo inputRepo, MusicCrudInterface musicCrudInterface) {
         super(inputRepo, musicCrudInterface);
     }
 
@@ -53,6 +53,8 @@ public class SentenceTrainTrainCrudServ extends SentenceTrainLogicServ implement
         SentenceTrain target = this.fetchSentenceById(reqDTO.getId());
 
         target.setCategory(reqDTO.getCategory());
+        target.setSentiment(this.parseCategorySentiment(reqDTO.getCategory()));
+        target.setText(reqDTO.getText());
         return target;
     }
 

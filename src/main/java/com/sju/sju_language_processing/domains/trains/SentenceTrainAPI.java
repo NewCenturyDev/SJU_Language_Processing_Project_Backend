@@ -7,7 +7,7 @@ import com.sju.sju_language_processing.domains.trains.dto.res.DeleteSentenceTrai
 import com.sju.sju_language_processing.domains.trains.dto.res.FetchSentenceTrainResDTO;
 import com.sju.sju_language_processing.domains.trains.dto.res.UpdateSentenceTrainResDTO;
 import com.sju.sju_language_processing.domains.trains.entity.SentenceTrain;
-import com.sju.sju_language_processing.domains.trains.service.SentenceTrainTrainCrudServ;
+import com.sju.sju_language_processing.domains.trains.service.SentenceTrainCrudServ;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 public class SentenceTrainAPI {
-    private final SentenceTrainTrainCrudServ sentenceTrainCrudServ;
+    private final SentenceTrainCrudServ sentenceTrainCrudServ;
 
     @PreAuthorize("hasAnyAuthority('ADMIN','ROOT_ADMIN')")
     @PostMapping("/trains")
