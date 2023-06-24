@@ -21,7 +21,7 @@ public class SentenceTrainAPI {
     private final SentenceTrainTrainCrudServ sentenceTrainCrudServ;
 
     @PreAuthorize("hasAnyAuthority('ADMIN','ROOT_ADMIN')")
-    @PostMapping("/sentences")
+    @PostMapping("/trains")
     ResponseEntity<?> createSentenceInput(@Valid @RequestBody CreateSentenceTrainReqDTO reqDTO) {
         CreateSentenceTrainResDTO resDTO = new CreateSentenceTrainResDTO();
 
@@ -34,7 +34,7 @@ public class SentenceTrainAPI {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','ROOT_ADMIN')")
-    @GetMapping("/sentences")
+    @GetMapping("/trains")
     ResponseEntity<?> fetchSentenceInput(@Valid FetchSentenceTrainReqDTO reqDTO, @RequestHeader("Request-Type") String reqHeader) {
         FetchSentenceTrainReqType reqType = FetchSentenceTrainReqType.valueOf(reqHeader);
         FetchSentenceTrainResDTO resDTO = new FetchSentenceTrainResDTO();
@@ -60,7 +60,7 @@ public class SentenceTrainAPI {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','ROOT_ADMIN')")
-    @PutMapping("/sentences")
+    @PutMapping("/trains")
     ResponseEntity<?> updateSentenceInput(@Valid @RequestBody UpdateSentenceTrainReqDTO reqDTO) {
         UpdateSentenceTrainResDTO resDTO = new UpdateSentenceTrainResDTO();
 
@@ -73,7 +73,7 @@ public class SentenceTrainAPI {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','ROOT_ADMIN')")
-    @DeleteMapping("/sentences")
+    @DeleteMapping("/trains")
     ResponseEntity<?> deleteSentenceInput(@Valid DeleteSentenceTrainReqDTO reqDTO) {
         DeleteSentenceTrainResDTO resDTO = new DeleteSentenceTrainResDTO();
 
