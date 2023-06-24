@@ -1,5 +1,6 @@
 package com.sju.sju_language_processing.domains.sentences.service;
 
+import com.sju.sju_language_processing.commons.storage.StorageService;
 import com.sju.sju_language_processing.domains.musics.service.MusicCrudInterface;
 import com.sju.sju_language_processing.domains.sentences.dto.req.CreateSentenceInputReqDTO;
 import com.sju.sju_language_processing.domains.sentences.dto.req.UpdateSentenceInputReqDTO;
@@ -20,8 +21,8 @@ import java.util.Locale;
 
 @Service
 public class SentenceCrudServ extends SentenceLogicServ implements UserProfileServCommon {
-    public SentenceCrudServ(SentenceInputRepo inputRepo, MusicCrudInterface musicCrudInterface) {
-        super(inputRepo, musicCrudInterface);
+    public SentenceCrudServ(SentenceInputRepo inputRepo, MusicCrudInterface musicCrudInterface, StorageService storageServ) {
+        super(inputRepo, musicCrudInterface, storageServ);
     }
 
     @Transactional

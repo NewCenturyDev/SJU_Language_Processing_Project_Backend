@@ -201,6 +201,10 @@ public class StorageService {
         return Paths.get(this.storageRootPath, entityName, entityName + "_" + entityId);
     }
 
+    public Path getPythonScriptPath(String fileName) {
+        return Paths.get(this.storageRootPath, fileName);
+    }
+
     // 공통 - 하위 엔티티 스토리지 경로 조회
     public Path getEntityStoragePath(Path parentEntityStoragePath, String subEntityName, Long subEntityId) {
         return Paths.get(parentEntityStoragePath.toString(), subEntityName, subEntityName + "_" + subEntityId);

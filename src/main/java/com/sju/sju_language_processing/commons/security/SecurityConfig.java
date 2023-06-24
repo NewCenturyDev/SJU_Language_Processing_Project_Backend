@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @AllArgsConstructor
 public class SecurityConfig {
+    private final CORSConfig corsConfig = new CORSConfig();
     private final JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JWTAccessDeniedHandler jwtAccessDeniedHandler;
     private final JWTFilter jwtFilter;
@@ -21,7 +22,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // 토큰 방식 로그인을 사용하기 위해 CSRF 사용안함
-        http.csrf().disable();
+        http.addFilter(corsConfig.corsFilter())
+                .csrf().disable();
 
         // JWT 예외 처리
         http.exceptionHandling()
