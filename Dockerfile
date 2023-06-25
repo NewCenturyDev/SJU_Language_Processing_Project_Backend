@@ -11,5 +11,8 @@ COPY ./requirements.txt requirements.txt
 RUN pip3 install --upgrade pip
 RUN pip3 install -r /requirements.txt
 
+COPY ./tensorflow-2.8.0-cp310-cp310-linux_x86_64.whl tensorflow-2.8.0-cp310-cp310-linux_x86_64.whl
+RUN pip3 install --ignore-installed --upgrade /tensorflow-2.8.0-cp310-cp310-linux_x86_64.whl
+
 COPY build/libs/SJU_Language_Processing-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
